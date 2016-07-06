@@ -24,11 +24,12 @@ type methodinfo_st struct {
 }
 
 type classinfo_st struct {
-	name    string
-	id      int
-	parents []string
-	members []memberinfo_st
-	methods []methodinfo_st
+	name     string
+	filename string
+	id       int
+	parents  []string
+	members  []memberinfo_st
+	methods  []methodinfo_st
 }
 
 var classmap map[string]classinfo_st

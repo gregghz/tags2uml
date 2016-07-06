@@ -15,6 +15,7 @@
 
 package main
 
+import "fmt"
 import "strings"
 import "strconv"
 
@@ -53,7 +54,10 @@ func dotmake() string {
 			outs = append(outs, "|")
 			outs = append(outs, add_methods(value.methods, value.name))
 		}
-		outs = append(outs, "}\" style=filled fillcolor=\"#ffffff\" shape=\"record\"];\n")
+		outs = append(outs, "}\" ")
+		outs = append(outs, fmt.Sprintf("classname=\"%s\" ", value.name))
+		outs = append(outs, fmt.Sprintf("filename=\"%s\" ", value.filename))
+		outs = append(outs, "style=filled fillcolor=\"#ffffff\" shape=\"record\"];\n")
 	}
 	idpairs := make(map[string]int)
 	parentmap := make(map[int][]int)

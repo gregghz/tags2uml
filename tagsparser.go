@@ -36,6 +36,7 @@ func parseClass(fn string) {
 		if len(match) != 0 {
 			newclass := classinfo_st{}
 			newclass.name = match[1]
+			newclass.filename = match[2]
 			match2 := re2.FindStringSubmatch(scanner.Text())
 			if len(match2) != 0 {
 				newclass.parents = strings.Split(match2[1], ",")
