@@ -57,6 +57,7 @@ func dotmake() string {
 		outs = append(outs, "}\" ")
 		outs = append(outs, fmt.Sprintf("classname=\"%s\" ", value.name))
 		outs = append(outs, fmt.Sprintf("filename=\"%s\" ", value.filename))
+		outs = append(outs, "lucidshape=\"UMLClassBlock\" ")
 		outs = append(outs, "style=filled fillcolor=\"#ffffff\" shape=\"record\"];\n")
 	}
 	idpairs := make(map[string]int)
