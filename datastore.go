@@ -1,6 +1,5 @@
-
 //   tags2uml
-//   Copyright 2014 ruben2020 https://github.com/ruben2020/ 
+//   Copyright 2014 ruben2020 https://github.com/ruben2020/
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -17,27 +16,24 @@
 package main
 
 type memberinfo_st struct {
-   name, access, datatype string
+	name, access, datatype string
 }
 
 type methodinfo_st struct {
-   name, access, returntype string
+	name, access, returntype string
 }
 
-
 type classinfo_st struct {
-   name string
-   id int
-   parents []string
-   members []memberinfo_st
-   methods []methodinfo_st
+	name    string
+	id      int
+	parents []string
+	members []memberinfo_st
+	methods []methodinfo_st
 }
 
 var classmap map[string]classinfo_st
 var idcounter int = 1
 
-
 func init_datastore() {
-    classmap = make(map[string]classinfo_st)
+	classmap = make(map[string]classinfo_st)
 }
-
