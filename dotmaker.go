@@ -166,7 +166,7 @@ func add_member_string(meminfo memberinfo_st) string {
 	if len(meminfo.datatype) > 0 {
 		outs = append(outs, " : ", meminfo.datatype)
 	}
-	outs = append(outs, "\\l")
+	outs = append(outs, "\\n")
 	return strings.Join(outs, "")
 }
 
@@ -226,6 +226,6 @@ func add_method_string(methinfo methodinfo_st) string {
 	if len(methinfo.returntype) > 0 {
 		outs = append(outs, " : ", methinfo.returntype)
 	}
-	outs = append(outs, "\\l")
+	outs = append(outs, "\\n")
 	return strings.Join(outs, "")
 }
