@@ -35,6 +35,8 @@ var input_file string = "tags"
 var output_file string = "-"
 var help bool = false
 var ver bool = false
+var base_url = ""
+var strip = ""
 
 func checkRange() bool {
 	retval := true
@@ -55,6 +57,8 @@ func parse_options() {
 	flag.IntVar(&opt_members, "members", 2, "0=members not displayed, 1=all members, 2=only public (default), 3=only public and protected")
 	flag.StringVar(&input_file, "infile", "tags", "path to input file (default=\"tags\")")
 	flag.StringVar(&output_file, "outfile", "-", "path to output file, use \"-\" for stdout (default=\"-\")")
+	flag.StringVar(&base_url, "baseurl", "", "base of filename attribute for each node")
+	flag.StringVar(&strip, "strip", "", "strip this from the filename before adding the baseurl")
 	flag.BoolVar(&help, "help", false, "print help message")
 	flag.BoolVar(&ver, "ver", false, "print version")
 	flag.Parse()

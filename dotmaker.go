@@ -56,7 +56,11 @@ func dotmake() string {
 		}
 		outs = append(outs, "}\" ")
 		outs = append(outs, fmt.Sprintf("classname=\"%s\" ", value.name))
-		outs = append(outs, fmt.Sprintf("filename=\"%s\" ", value.filename))
+
+		path := strings.TrimPrefix(value.filename, strip)
+		filename := base_url + path
+		outs = append(outs, fmt.Sprintf("filename=\"%s\" ", filename))
+
 		outs = append(outs, "lucidshape=\"UMLClassBlock\" ")
 		outs = append(outs, "style=filled fillcolor=\"#ffffff\" shape=\"record\"];\n")
 	}
