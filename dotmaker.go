@@ -36,6 +36,11 @@ func getrelations(membrs []memberinfo_st) []int {
 	return retval
 }
 
+func prepFilename(filename string) string {
+	path := strings.TrimPrefix(filename, strip)
+	return base_url + path
+}
+
 func dotmake() string {
 	var outs []string
 	var parentstr classinfo_st
@@ -57,9 +62,19 @@ func dotmake() string {
 		outs = append(outs, "}\" ")
 		outs = append(outs, fmt.Sprintf("classname=\"%s\" ", value.name))
 
-		path := strings.TrimPrefix(value.filename, strip)
-		filename := base_url + path
-		outs = append(outs, fmt.Sprintf("filename=\"%s\" ", filename))
+		memLineNums := []string{}
+		for _, mem := range value.members {
+			memLineNums = append(memLineNums, strconv.Itoa(mem.line))
+		}
+
+		methLineNums := []string{}
+		for _, meth := range value.methods {
+			methLineNums = append(methLineNums, strconv.Itoa(meth.line))
+		}
+
+		outs = append(outs, fmt.Sprintf("memLineNums=\"%s\" ", add_member_line(value.members, value.name)))
+		outs = append(outs, fmt.Sprintf("methLineNums=\"%s\" ", add_method_line(value.methods, value.name)))
+		outs = append(outs, fmt.Sprintf("filename=\"%s\" ", prepFilename(value.filename)))
 
 		outs = append(outs, "lucidshape=\"UMLClassBlock\" ")
 		outs = append(outs, "style=filled fillcolor=\"#ffffff\" shape=\"record\"];\n")
@@ -139,24 +154,37 @@ func buildArrowLine(id1 int, id2 int, arrowtype string) string {
 
 func add_members(arr []memberinfo_st) string {
 	var outs []string
+	dupmap := make(map[string]int)
 	if opt_members == NONE {
 		return ""
 	}
 	if opt_members == ONLYPUBLIC {
 		for idx := range arr {
+			if dupmap[arr[idx].name] == 99 {
+				continue
+			}
 			if arr[idx].access == "+" {
 				outs = append(outs, add_member_string(arr[idx]))
+				dupmap[arr[idx].name] = 99
 			}
 		}
 	} else if opt_members == ONLYPUBLICPROT {
 		for idx := range arr {
+			if dupmap[arr[idx].name] == 99 {
+				continue
+			}
 			if (arr[idx].access == "+") || (arr[idx].access == "#") {
 				outs = append(outs, add_member_string(arr[idx]))
+				dupmap[arr[idx].name] = 99
 			}
 		}
 	} else {
 		for idx := range arr {
+			if dupmap[arr[idx].name] == 99 {
+				continue
+			}
 			outs = append(outs, add_member_string(arr[idx]))
+			dupmap[arr[idx].name] = 99
 		}
 	}
 	return strings.Join(outs, "")
@@ -219,6 +247,100 @@ func add_methods(arr []methodinfo_st, classname string) string {
 		}
 	}
 	return strings.Join(outs, "")
+}
+
+func add_method_line(arr []methodinfo_st, classname string) string {
+	var outs []string
+	dupmap := make(map[string]int)
+	if opt_methods == NONE {
+		return ""
+	}
+	if opt_methods == ONLYPUBLIC {
+		for idx := range arr {
+			if arr[idx].name == classname {
+				continue
+			}
+			if dupmap[arr[idx].name] == 99 {
+				continue
+			}
+			if arr[idx].access == "+" {
+				outs = append(outs, strconv.Itoa(arr[idx].line))
+				dupmap[arr[idx].name] = 99
+			}
+		}
+	} else if opt_methods == ONLYPUBLICPROT {
+		for idx := range arr {
+			if arr[idx].name == classname {
+				continue
+			}
+			if dupmap[arr[idx].name] == 99 {
+				continue
+			}
+			if (arr[idx].access == "+") || (arr[idx].access == "#") {
+				outs = append(outs, strconv.Itoa(arr[idx].line))
+				dupmap[arr[idx].name] = 99
+			}
+		}
+	} else {
+		for idx := range arr {
+			if arr[idx].name == classname {
+				continue
+			}
+			if dupmap[arr[idx].name] == 99 {
+				continue
+			}
+			outs = append(outs, strconv.Itoa(arr[idx].line))
+			dupmap[arr[idx].name] = 99
+		}
+	}
+	return strings.Join(outs, ",")
+}
+
+func add_member_line(arr []memberinfo_st, classname string) string {
+	var outs []string
+	dupmap := make(map[string]int)
+	if opt_methods == NONE {
+		return ""
+	}
+	if opt_methods == ONLYPUBLIC {
+		for idx := range arr {
+			if arr[idx].name == classname {
+				continue
+			}
+			if dupmap[arr[idx].name] == 99 {
+				continue
+			}
+			if arr[idx].access == "+" {
+				outs = append(outs, strconv.Itoa(arr[idx].line))
+				dupmap[arr[idx].name] = 99
+			}
+		}
+	} else if opt_methods == ONLYPUBLICPROT {
+		for idx := range arr {
+			if arr[idx].name == classname {
+				continue
+			}
+			if dupmap[arr[idx].name] == 99 {
+				continue
+			}
+			if (arr[idx].access == "+") || (arr[idx].access == "#") {
+				outs = append(outs, strconv.Itoa(arr[idx].line))
+				dupmap[arr[idx].name] = 99
+			}
+		}
+	} else {
+		for idx := range arr {
+			if arr[idx].name == classname {
+				continue
+			}
+			if dupmap[arr[idx].name] == 99 {
+				continue
+			}
+			outs = append(outs, strconv.Itoa(arr[idx].line))
+			dupmap[arr[idx].name] = 99
+		}
+	}
+	return strings.Join(outs, ",")
 }
 
 func add_method_string(methinfo methodinfo_st) string {

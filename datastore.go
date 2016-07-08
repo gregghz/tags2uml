@@ -16,11 +16,13 @@
 package main
 
 type memberinfo_st struct {
-	name, access, datatype string
+	name, access, datatype, filename string
+	line                             int
 }
 
 type methodinfo_st struct {
-	name, access, returntype string
+	name, access, returntype, filename string
+	line                               int
 }
 
 type classinfo_st struct {

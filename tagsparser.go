@@ -19,6 +19,7 @@ import "os"
 import "fmt"
 import "bufio"
 import "regexp"
+import "strconv"
 import "strings"
 
 func parseClass(fn string) {
@@ -66,6 +67,7 @@ func parseMembersMethods(fn string) {
 	rec := regexp.MustCompile(`class:([A-Za-z0-9_\.]+)`)
 	rel := regexp.MustCompile(`language:([A-Za-z0-9_\#]+)`)
 	ret := regexp.MustCompile(`\/\^([ ]*)([A-Za-z0-9_\.]+)([^A-Za-z0-9_]+)(.*)\$\/`)
+	reln := regexp.MustCompile(`line:([0-9]+)`)
 	for scanner.Scan() {
 		match := re.FindStringSubmatch(scanner.Text())
 		if len(match) == 0 {
@@ -105,11 +107,21 @@ func parseMembersMethods(fn string) {
 		if (len(matcht) != 0) && (datatype_supported(matchl[1])) {
 			datatype = matcht[2]
 		}
+
+		matchLine := reln.FindStringSubmatch(scanner.Text())
+		line := 0
+		if len(matchLine) != 0 {
+			ln, err := strconv.Atoi(matchLine[1])
+			if err == nil {
+				line = ln
+			}
+		}
+
 		if (thetype == "member") || (thetype == "field") {
-			memberinfo := memberinfo_st{match[1], access1, datatype}
+			memberinfo := memberinfo_st{match[1], access1, datatype, match[2], line}
 			ci.members = append(ci.members, memberinfo)
 		} else if (thetype == "function") || (thetype == "method") {
-			methodinfo := methodinfo_st{match[1], access1, datatype}
+			methodinfo := methodinfo_st{match[1], access1, datatype, match[2], line}
 			ci.methods = append(ci.methods, methodinfo)
 		}
 		classmap[ci.name] = ci
